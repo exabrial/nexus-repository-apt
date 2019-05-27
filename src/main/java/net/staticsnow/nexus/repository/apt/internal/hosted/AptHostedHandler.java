@@ -1,8 +1,8 @@
 /*
  * Nexus APT plugin.
- * 
+ *
  * Copyright (c) 2016-Present Michael Poindexter.
- * 
+ *
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License Version 1.0,
  * which accompanies this distribution and is available at http://www.eclipse.org/legal/epl-v10.html.
  *
@@ -14,6 +14,7 @@ package net.staticsnow.nexus.repository.apt.internal.hosted;
 import static org.sonatype.nexus.repository.http.HttpMethods.GET;
 import static org.sonatype.nexus.repository.http.HttpMethods.HEAD;
 import static org.sonatype.nexus.repository.http.HttpMethods.POST;
+import static org.sonatype.nexus.repository.http.HttpMethods.PUT;
 
 import java.io.IOException;
 
@@ -55,7 +56,9 @@ public class AptHostedHandler
           hostedFacet.rebuildIndexes();
           return HttpResponses.ok();
         }
-        else if (path.equals("")) {
+      }
+      case PUT: {
+        if (path.equals("")) {
           hostedFacet.ingestAsset(context.getRequest().getPayload());
           return HttpResponses.created();
         }
@@ -65,7 +68,7 @@ public class AptHostedHandler
       }
 
       default:
-        return HttpResponses.methodNotAllowed(method, GET, HEAD, POST);
+        return HttpResponses.methodNotAllowed(method, GET, HEAD, POST, PUT);
     }
   }
 
